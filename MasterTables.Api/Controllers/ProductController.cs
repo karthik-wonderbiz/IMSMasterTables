@@ -20,8 +20,16 @@ namespace MasterTables.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
-            var products = await _productService.GetAllProductsAsync();
-            return Ok(products);
+            try
+            {
+                var products = await _productService.GetAllProductsAsync();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+            
         }
 
         [HttpGet("{id:guid}")]

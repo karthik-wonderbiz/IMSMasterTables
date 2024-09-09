@@ -3,7 +3,6 @@ using MasterTables.Application.Services;
 using MasterTables.Domain.Interfaces;
 using MasterTables.Infrastructure.Data;
 using MasterTables.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +12,9 @@ builder.Services.AddDbContext<MasterTablesDbContext>(options =>
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddScoped<IVendorRepository, VendorRepository>();
+builder.Services.AddScoped<IVendorService, VendorService>();
 
 builder.Services.AddControllers();
 
