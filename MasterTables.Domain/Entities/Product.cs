@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace MasterTables.Domain.Entities
 {
-    internal class Product
+    public class Product : BaseEntity
     {
-
+        public string Name { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public string Code { get; set; } = string.Empty;
+        public bool IsActive { get; set; } = true;
     }
+
 }

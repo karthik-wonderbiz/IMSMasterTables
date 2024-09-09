@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MasterTables.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace MasterTables.Infrastructure.Data
 {
-    internal class MasterTablesDbContext
+    public class MasterTablesDbContext : DbContext
     {
+        public MasterTablesDbContext(DbContextOptions<MasterTablesDbContext> options) : base(options) { }
+
+        public DbSet<Product> Products { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>().HasKey(p => p.Id);
+        }
     }
+
 }
