@@ -8,5 +8,6 @@ namespace MasterTables.Domain.Entities
 {
     internal class Product
     {
+
     }
 }
