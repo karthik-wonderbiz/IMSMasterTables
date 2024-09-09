@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace MasterTables.Domain.Entities
 {
-    public class Product : BaseEntity
+    public class Vendor : BaseEntity
     {
         public string Name { get; set; } = string.Empty;
-        public decimal Price { get; set; }
+        public string Address { get; set; } = string.Empty;
         public string Code { get; set; } = string.Empty;
+        public string ContactPersonName { get; set; } = string.Empty;
+        public string ContactPersonPhone { get; set; } = string.Empty;
         public bool IsActive { get; set; } = true;
     }
-
 }
