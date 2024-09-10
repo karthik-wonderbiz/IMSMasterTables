@@ -11,10 +11,13 @@ namespace MasterTables.Infrastructure.Data
 
         public DbSet<Vendor> Vendors { get; set; }
 
+        public DbSet<Customer> Customers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasKey(p => p.Id);
             modelBuilder.Entity<Vendor>().HasKey(p => p.Id);
+            modelBuilder.Entity<Customer>().HasKey(p => p.Id);
             base.OnModelCreating(modelBuilder);
         }
     }
