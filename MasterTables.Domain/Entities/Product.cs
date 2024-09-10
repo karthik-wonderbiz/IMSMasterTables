@@ -8,10 +8,10 @@ namespace MasterTables.Domain.Entities
 {
     public class Product : BaseEntity
     {
-        public string Name { get; set; } = string.Empty;
-        public decimal Price { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public double Price { get; set; }
         public string Code { get; set; } = string.Empty;
-        public bool IsActive { get; set; } = true;
+        public bool IsActive { get; set; } = false;
     }
 
 }
