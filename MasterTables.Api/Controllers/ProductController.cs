@@ -1,68 +1,52 @@
-﻿using MasterTables.Application.Interfaces;
-using MasterTables.Domain.Entities;
+﻿using MasterTables.Application.DTOs;
+using MasterTables.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MasterTables.Api.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    [ApiController]
+    public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
 
-        public ProductsController(IProductService productService)
+        public ProductController(IProductService productService)
         {
             _productService = productService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] ProductDto productDto)
         {
-            try
-            {
-                var products = await _productService.GetAllProductsAsync();
-                return Ok(products);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-            
+            var productId = await _productService.CreateProductAsync(productDto);
+            return Ok(productId);
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetProductById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var product = await _productService.GetProductByIdAsync(id);
-            if (product == null)
-                return NotFound();
             return Ok(product);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] Product product)
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var createdProduct = await _productService.CreateProductAsync(product);
-            return CreatedAtAction(nameof(GetProductById), new { id = createdProduct.Id }, createdProduct);
+            var products = await _productService.GetAllProductsAsync();
+            return Ok(products);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] Product product)
+        public async Task<IActionResult> Update(Guid id, [FromBody] ProductDto productDto)
         {
-            if (id != product.Id)
-                return BadRequest("Product ID mismatch.");
-
-            var updatedProduct = await _productService.UpdateProductAsync(product);
-            return Ok(updatedProduct);
+            await _productService.UpdateProductAsync(id, productDto);
+            return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteProduct(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _productService.DeleteProductAsync(id);
             return NoContent();
