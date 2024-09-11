@@ -1,85 +1,130 @@
-﻿using AutoMapper;
-using MasterTables.Application.DTOs;
+﻿using MasterTables.Application.DTOs;
 using MasterTables.Application.Interfaces;
-using MasterTables.Domain.Entities;
-using MasterTables.Domain.Interfaces;
+using MasterTables.Domain.Exceptions;
+using MediatR;
+using MasterTables.Application.Commands;
+using MasterTables.Application.Queries;
 
 namespace MasterTables.Application.Services
 {
     public class ProductService : IProductService
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
 
-        public ProductService(IProductRepository productRepository, IMapper mapper)
+        public ProductService(IMediator mediator)
         {
-            _productRepository = productRepository;
-            _mapper = mapper;
+            _mediator = mediator;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(CancellationToken cancellationToken)
         {
-            var products = await _productRepository.GetAllProductsAsync();
-            return _mapper.Map<IEnumerable<ProductDto>>(products);
-        }
-
-        public async Task<ProductDto> GetProductByIdAsync(Guid id)
-        {
-            var product = await _productRepository.GetProductByIdAsync(id);
-            if (product == null)
-            {
-                throw new Exception("Product not found");
-            }
-            return _mapper.Map<ProductDto>(product);
-        }
-
-        public async Task<Guid> CreateProductAsync(ProductDto productDto)
-        {
-
             try
             {
-                var product = _mapper.Map<Product>(productDto);
-                product.CreatedAt = DateTime.UtcNow;
-                product.UpdatedAt = DateTime.UtcNow;
-                product.CreatedBy = "";
-                product.UpdatedBy = "";
-                product.IsActive = true;
-
-                await _productRepository.AddProductAsync(product);
-                return product.Id;
+                var query = new GetAllProductsQuery();
+                var result = await _mediator.Send(query, cancellationToken);
+                return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Log exception here
+                throw new ApplicationException("An error occurred while retrieving products.", ex);
+            }
+        }
 
+        public async Task<ProductDto> GetProductByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var query = new GetProductByIdQuery(id);
+                var result = await _mediator.Send(query, cancellationToken);
+                if (result == null)
+                {
+                    throw new ProductNotFoundException($"Product with ID {id} not found.");
+                }
+                return result;
+            }
+            catch (ProductNotFoundException)
+            {
                 throw;
             }
-
-            
+            catch (Exception ex)
+            {
+                // Log exception here
+                throw new ApplicationException("An error occurred while retrieving the product.", ex);
+            }
         }
 
-        public async Task UpdateProductAsync(Guid id, ProductDto productDto)
+        public async Task<ProductDto> CreateProductAsync(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var existingProduct = await _productRepository.GetProductByIdAsync(id);
-            if (existingProduct == null)
+            try
             {
-                throw new Exception("Product not found");
+                var command = new CreateProductCommand
+                {
+                    ProductName = request.ProductName,
+                    Price = request.Price,
+                    Code = request.Code,
+                };
+                var result = await _mediator.Send(command, cancellationToken);
+                if (result == null)
+                {
+                    throw new ProductAlreadyExistsException("Product already exists.");
+                }
+                return result;
             }
-
-            _mapper.Map(productDto, existingProduct);
-            existingProduct.UpdatedAt = DateTime.UtcNow;
-
-            await _productRepository.UpdateProductAsync(existingProduct);
+            catch (ProductAlreadyExistsException)
+            {
+                throw; // rethrow the custom exception
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                throw new ApplicationException("An error occurred while creating the product.", ex);
+            }
         }
 
-        public async Task DeleteProductAsync(Guid id)
+        public async Task<ProductDto> UpdateProductAsync(UpdateProductCommand command, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.GetProductByIdAsync(id);
-            if (product == null)
+            try
             {
-                throw new Exception("Product not found");
+                var result = await _mediator.Send(command, cancellationToken);
+                if (result == null)
+                {
+                    throw new ProductNotFoundException("Product not found for update.");
+                }
+                return result;
             }
+            catch (ProductNotFoundException)
+            {
+                throw; // rethrow the custom exception
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                throw;
+            }
+        }
 
-            await _productRepository.DeleteProductAsync(id);
+        public async Task<bool> DeleteProductAsync(Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var command = new DeleteProductCommand { Id = id };
+                var result = await _mediator.Send(command, cancellationToken);
+                if (!result)
+                {
+                    throw new ProductNotFoundException("Product not found for deletion.");
+                }
+                return result;
+            }
+            catch (ProductNotFoundException)
+            {
+                throw; // rethrow the custom exception
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                throw;
+            }
         }
     }
 }

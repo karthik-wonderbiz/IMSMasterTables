@@ -14,46 +14,37 @@ namespace MasterTables.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products.ToListAsync(cancellationToken);
         }
 
-        public async Task<Product> GetProductByIdAsync(Guid id)
+        public async Task<Product> GetProductByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products.FindAsync(new object[] { id }, cancellationToken);
         }
 
-        public async Task<Product> AddProductAsync(Product product)
+        public async Task AddProductAsync(Product product, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                _context.Products.Add(product);
-                await _context.SaveChangesAsync();
-                return product;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            await _context.Products.AddAsync(product, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<Product> UpdateProductAsync(Product product)
+        public async Task UpdateProductAsync(Product product, CancellationToken cancellationToken = default)
         {
             _context.Products.Update(product);
-            await _context.SaveChangesAsync();
-            return product;
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteProductAsync(Guid id)
+        public async Task DeleteProductAsync(Product product, CancellationToken cancellationToken = default)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-            }
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<bool> ProductExistsAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Products.AnyAsync(c => c.Id == id, cancellationToken);
         }
     }
 }

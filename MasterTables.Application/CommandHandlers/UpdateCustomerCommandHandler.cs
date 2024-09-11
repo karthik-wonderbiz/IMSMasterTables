@@ -26,7 +26,7 @@ namespace MasterTables.Application.CommandHandlers
             customer.CustomerEmail = request.CustomerEmail;
             customer.PhoneNumber = request.PhoneNumber;
             customer.IsActive = request.IsActive;
-            customer.UpdatedBy = "System"; // Modify as needed
+            customer.UpdatedBy = Guid.NewGuid(); // Modify as needed
             customer.UpdatedAt = DateTime.UtcNow;
 
             await _repository.UpdateCustomerAsync(customer, cancellationToken);

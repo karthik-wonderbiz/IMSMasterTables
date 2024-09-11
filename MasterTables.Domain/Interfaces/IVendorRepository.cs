@@ -1,18 +1,14 @@
 ﻿using MasterTables.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MasterTables.Domain.Interfaces
 {
     public interface IVendorRepository
     {
-        Task<IEnumerable<Vendor>> GetAllVendorsAsync();
-        Task<Vendor> GetVendorByIdAsync(Guid id);
-        Task<Vendor> AddVendorAsync(Vendor Vendor);
-        Task<Vendor> UpdateVendorAsync(Vendor Vendor);
-        Task DeleteVendorAsync(Guid id);
+        Task<IEnumerable<Vendor>> GetAllVendorsAsync(CancellationToken cancellationToken);
+        Task<Vendor> GetVendorByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task AddVendorAsync(Vendor vendor, CancellationToken cancellationToken);
+        Task UpdateVendorAsync(Vendor vendor, CancellationToken cancellationToken);
+        Task DeleteVendorAsync(Vendor vendor, CancellationToken cancellationToken);
+        Task<bool> VendorExistsAsync(Guid id, CancellationToken cancellationToken);
     }
 }
