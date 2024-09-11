@@ -1,4 +1,3 @@
-using FluentValidation.AspNetCore;
 using MasterTables.Application.Interfaces;
 using MasterTables.Application.Mapping;
 using MasterTables.Application.Services;
@@ -7,35 +6,43 @@ using MasterTables.Infrastructure.Data;
 using MasterTables.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using MediatR;
+using MasterTables.Application.QueryHandlers;
+using MasterTables.Application.Commands;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// AutoMapper configuration
 builder.Services.AddAutoMapper(typeof(ProductMappingProfile));
 
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
-
+// DbContext configuration
 builder.Services.AddDbContext<MasterTablesDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("MasterTables.Api")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                         b => b.MigrationsAssembly("MasterTables.Api")));
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCustomerCommand).Assembly));
+
+
+// Register repositories and services
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IVendorRepository, VendorRepository>();
 builder.Services.AddScoped<IVendorService, VendorService>();
 
-//builder.Services.AddMediatR(typeof(Program));
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
+// Controller services
 builder.Services.AddControllers();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+// Enable Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Middleware configuration
 app.UseSwagger();
 app.UseSwaggerUI();
 
