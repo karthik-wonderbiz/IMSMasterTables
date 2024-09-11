@@ -15,6 +15,7 @@ namespace MasterTables.Infrastructure.Data
         {
             modelBuilder.Entity<Product>().HasKey(p => p.Id);
             modelBuilder.Entity<Vendor>().HasKey(p => p.Id);
+            base.OnModelCreating(modelBuilder);
         }
     }
 

@@ -16,6 +16,7 @@ namespace MasterTables.Application.Commands
             Code = code;
             IsActive = isActive;
         }
+
     }
 
 }
