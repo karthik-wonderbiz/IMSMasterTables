@@ -26,9 +26,17 @@ namespace MasterTables.Infrastructure.Repositories
 
         public async Task<Product> AddProductAsync(Product product)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            return product;
+            try
+            {
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+                return product;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<Product> UpdateProductAsync(Product product)

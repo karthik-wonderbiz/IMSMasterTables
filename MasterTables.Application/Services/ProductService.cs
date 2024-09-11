@@ -25,8 +25,16 @@ namespace MasterTables.Application.Services
 
         public async Task<Product> CreateProductAsync(Product product)
         {
-            product.CreatedAt = DateTime.UtcNow;
-            return await _productRepository.AddProductAsync(product);
+            try
+            {
+                product.CreatedAt = DateTime.UtcNow;
+                return await _productRepository.AddProductAsync(product);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<Product> UpdateProductAsync(Product product)
