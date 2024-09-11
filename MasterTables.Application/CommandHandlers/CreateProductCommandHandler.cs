@@ -1,30 +1,41 @@
 ﻿using MasterTables.Application.Commands;
 using MasterTables.Application.DTOs;
-using MasterTables.Application.Interfaces;
+using MasterTables.Domain.Entities;
+using MasterTables.Domain.Interfaces;
 using MediatR;
 
 namespace MasterTables.Application.CommandHandlers
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Guid>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ProductDto>
     {
-        private readonly IProductService _productService;
+        private readonly IProductRepository _repository;
 
-        public CreateProductCommandHandler(IProductService productService)
+        public CreateProductCommandHandler(IProductRepository repository)
         {
-            _productService = productService;
+            _repository = repository;
         }
 
-        public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var productDto = new ProductDto
+            var product = new Product
             {
                 ProductName = request.ProductName,
                 Price = request.Price,
                 Code = request.Code,
-                IsActive = true
+                IsActive = false,
+                CreatedBy = Guid.NewGuid(),
+                UpdatedBy = Guid.NewGuid()
             };
 
-            return await _productService.CreateProductAsync(productDto);
+            await _repository.AddProductAsync(product, cancellationToken);
+
+            return new ProductDto
+            {
+                Id = product.Id,
+                ProductName = product.ProductName,
+                Price = product.Price,
+                Code = product.Code,
+            };
         }
     }
 }

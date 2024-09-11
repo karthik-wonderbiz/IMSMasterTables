@@ -14,38 +14,37 @@ namespace MasterTables.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Vendor>> GetAllVendorsAsync()
+        public async Task<IEnumerable<Vendor>> GetAllVendorsAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Vendors.ToListAsync();
+            return await _context.Vendors.ToListAsync(cancellationToken);
         }
 
-        public async Task<Vendor> GetVendorByIdAsync(Guid id)
+        public async Task<Vendor> GetVendorByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            return await _context.Vendors.FindAsync(id);
+            return await _context.Vendors.FindAsync(new object[] { id }, cancellationToken);
         }
 
-        public async Task<Vendor> AddVendorAsync(Vendor Vendor)
+        public async Task AddVendorAsync(Vendor vendor, CancellationToken cancellationToken = default)
         {
-            _context.Vendors.Add(Vendor);
-            await _context.SaveChangesAsync();
-            return Vendor;
+            await _context.Vendors.AddAsync(vendor, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<Vendor> UpdateVendorAsync(Vendor Vendor)
+        public async Task UpdateVendorAsync(Vendor vendor, CancellationToken cancellationToken = default)
         {
-            _context.Vendors.Update(Vendor);
-            await _context.SaveChangesAsync();
-            return Vendor;
+            _context.Vendors.Update(vendor);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteVendorAsync(Guid id)
+        public async Task DeleteVendorAsync(Vendor vendor, CancellationToken cancellationToken = default)
         {
-            var Vendor = await _context.Vendors.FindAsync(id);
-            if (Vendor != null)
-            {
-                _context.Vendors.Remove(Vendor);
-                await _context.SaveChangesAsync();
-            }
+            _context.Vendors.Remove(vendor);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<bool> VendorExistsAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Vendors.AnyAsync(c => c.Id == id, cancellationToken);
         }
     }
 }

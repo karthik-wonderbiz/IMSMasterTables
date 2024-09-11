@@ -1,20 +1,19 @@
-﻿using MasterTables.Application.Interfaces;
-using MasterTables.Domain.Entities;
+﻿using MasterTables.Application.Commands;
+using MasterTables.Application.Interfaces;
+using MasterTables.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MasterTables.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class VendorsController : ControllerBase
+    public class VendorController : ControllerBase
     {
-        private readonly IVendorService _VendorService;
+        private readonly IVendorService _vendorService;
 
-        public VendorsController(IVendorService VendorService)
+        public VendorController(IVendorService vendorService)
         {
-            _VendorService = VendorService;
+            _vendorService = vendorService;
         }
 
         [HttpGet]
@@ -22,50 +21,89 @@ namespace MasterTables.Api.Controllers
         {
             try
             {
-                var Vendors = await _VendorService.GetAllVendorsAsync();
-                return Ok(Vendors);
+                var vendors = await _vendorService.GetAllVendorsAsync();
+                return Ok(vendors);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                // Log exception here
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving vendors.");
             }
-
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetVendorById(Guid id)
         {
-            var Vendor = await _VendorService.GetVendorByIdAsync(id);
-            if (Vendor == null)
-                return NotFound();
-            return Ok(Vendor);
+            try
+            {
+                var vendor = await _vendorService.GetVendorByIdAsync(id);
+                return Ok(vendor);
+            }
+            catch (VendorNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the vendor.");
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateVendor([FromBody] Vendor Vendor)
+        public async Task<IActionResult> CreateVendor([FromBody] CreateVendorCommand command)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var createdVendor = await _VendorService.CreateVendorAsync(Vendor);
-            return CreatedAtAction(nameof(GetVendorById), new { id = createdVendor.Id }, createdVendor);
+            try
+            {
+                var vendor = await _vendorService.CreateVendorAsync(command);
+                return CreatedAtAction(nameof(GetVendorById), new { id = vendor.Id }, vendor);
+            }
+            catch (VendorAlreadyExistsException)
+            {
+                return Conflict("Vendor already exists.");
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the vendor.");
+            }
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateVendor(Guid id, [FromBody] Vendor Vendor)
+        public async Task<IActionResult> UpdateVendor(Guid id, [FromBody] UpdateVendorCommand command)
         {
-            if (id != Vendor.Id)
-                return BadRequest("Vendor ID mismatch.");
-
-            var updatedVendor = await _VendorService.UpdateVendorAsync(Vendor);
-            return Ok(updatedVendor);
+            try
+            {
+                command.Id = id;
+                var vendor = await _vendorService.UpdateVendorAsync(command);
+                return Ok(vendor);
+            }
+            catch (VendorNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteVendor(Guid id)
         {
-            await _VendorService.DeleteVendorAsync(id);
-            return NoContent();
+            try
+            {
+                var result = await _vendorService.DeleteVendorAsync(id);
+                return result ? NoContent() : NotFound();
+            }
+            catch (VendorNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
 }

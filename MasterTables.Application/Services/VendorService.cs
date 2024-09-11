@@ -1,43 +1,132 @@
-﻿using MasterTables.Application.Interfaces;
-using MasterTables.Domain.Entities;
-using MasterTables.Domain.Interfaces;
+﻿using MasterTables.Application.DTOs;
+using MasterTables.Application.Interfaces;
+using MasterTables.Domain.Exceptions;
+using MediatR;
+using MasterTables.Application.Commands;
+using MasterTables.Application.Queries;
 
 namespace MasterTables.Application.Services
 {
     public class VendorService : IVendorService
     {
-        private readonly IVendorRepository _VendorRepository;
+        private readonly IMediator _mediator;
 
-        public VendorService(IVendorRepository VendorRepository)
+        public VendorService(IMediator mediator)
         {
-            _VendorRepository = VendorRepository;
+            _mediator = mediator;
         }
 
-        public async Task<IEnumerable<Vendor>> GetAllVendorsAsync()
+        public async Task<IEnumerable<VendorDto>> GetAllVendorsAsync(CancellationToken cancellationToken)
         {
-            return await _VendorRepository.GetAllVendorsAsync();
+            try
+            {
+                var query = new GetAllVendorsQuery();
+                var result = await _mediator.Send(query, cancellationToken);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                throw new ApplicationException("An error occurred while retrieving vendors.", ex);
+            }
         }
 
-        public async Task<Vendor> GetVendorByIdAsync(Guid id)
+        public async Task<VendorDto> GetVendorByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _VendorRepository.GetVendorByIdAsync(id);
+            try
+            {
+                var query = new GetVendorByIdQuery(id);
+                var result = await _mediator.Send(query, cancellationToken);
+                if (result == null)
+                {
+                    throw new VendorNotFoundException($"Vendor with ID {id} not found.");
+                }
+                return result;
+            }
+            catch (VendorNotFoundException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                throw new ApplicationException("An error occurred while retrieving the vendor.", ex);
+            }
         }
 
-        public async Task<Vendor> CreateVendorAsync(Vendor Vendor)
+        public async Task<VendorDto> CreateVendorAsync(CreateVendorCommand request, CancellationToken cancellationToken)
         {
-            Vendor.CreatedAt = DateTime.UtcNow;
-            return await _VendorRepository.AddVendorAsync(Vendor);
+            try
+            {
+                var command = new CreateVendorCommand
+                {
+                    VendorName = request.VendorName,
+                    Address = request.Address,
+                    Code = request.Code,
+                    ContactPersonName = request.ContactPersonName,
+                    ContactPersonPhone = request.ContactPersonPhone,
+                };
+                var result = await _mediator.Send(command, cancellationToken);
+                if (result == null)
+                {
+                    throw new VendorAlreadyExistsException("Vendor already exists.");
+                }
+                return result;
+            }
+            catch (VendorAlreadyExistsException)
+            {
+                throw; // rethrow the custom exception
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                throw new ApplicationException("An error occurred while creating the vendor.", ex);
+            }
         }
 
-        public async Task<Vendor> UpdateVendorAsync(Vendor Vendor)
+        public async Task<VendorDto> UpdateVendorAsync(UpdateVendorCommand command, CancellationToken cancellationToken)
         {
-            Vendor.UpdatedAt = DateTime.UtcNow;
-            return await _VendorRepository.UpdateVendorAsync(Vendor);
+            try
+            {
+                var result = await _mediator.Send(command, cancellationToken);
+                if (result == null)
+                {
+                    throw new VendorNotFoundException("Vendor not found for update.");
+                }
+                return result;
+            }
+            catch (VendorNotFoundException)
+            {
+                throw; // rethrow the custom exception
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                throw;
+            }
         }
 
-        public async Task DeleteVendorAsync(Guid id)
+        public async Task<bool> DeleteVendorAsync(Guid id, CancellationToken cancellationToken)
         {
-            await _VendorRepository.DeleteVendorAsync(id);
+            try
+            {
+                var command = new DeleteVendorCommand { Id = id };
+                var result = await _mediator.Send(command, cancellationToken);
+                if (!result)
+                {
+                    throw new VendorNotFoundException("Vendor not found for deletion.");
+                }
+                return result;
+            }
+            catch (VendorNotFoundException)
+            {
+                throw; // rethrow the custom exception
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                throw;
+            }
         }
     }
 }

@@ -33,6 +33,9 @@ builder.Services.AddScoped<IVendorService, VendorService>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 
+builder.Services.AddScoped<ITaxRepository, TaxRepository>();
+builder.Services.AddScoped<ITaxService, TaxService>();
+
 // Controller services
 builder.Services.AddControllers();
 

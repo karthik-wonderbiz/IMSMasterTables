@@ -1,13 +1,12 @@
-﻿using MasterTables.Application.DTOs;
+﻿using MasterTables.Application.Commands;
 using MasterTables.Application.Interfaces;
+using MasterTables.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MasterTables.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -17,40 +16,94 @@ namespace MasterTables.Api.Controllers
             _productService = productService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] ProductDto productDto)
-        {
-            var productId = await _productService.CreateProductAsync(productDto);
-            return Ok(productId);
-        }
-
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            var product = await _productService.GetProductByIdAsync(id);
-            return Ok(product);
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllProducts()
         {
-            var products = await _productService.GetAllProductsAsync();
-            return Ok(products);
+            try
+            {
+                var products = await _productService.GetAllProductsAsync();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving products.");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductById(Guid id)
+        {
+            try
+            {
+                var product = await _productService.GetProductByIdAsync(id);
+                return Ok(product);
+            }
+            catch (ProductNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while retrieving the product.");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
+        {
+            try
+            {
+                var product = await _productService.CreateProductAsync(command);
+                return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
+            }
+            catch (ProductAlreadyExistsException)
+            {
+                return Conflict("Product already exists.");
+            }
+            catch (Exception ex)
+            {
+                // Log exception here
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while creating the product.");
+            }
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] ProductDto productDto)
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductCommand command)
         {
-            await _productService.UpdateProductAsync(id, productDto);
-            return NoContent();
+            try
+            {
+                command.Id = id;
+                var product = await _productService.UpdateProductAsync(command);
+                return Ok(product);
+            }
+            catch (ProductNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> DeleteProduct(Guid id)
         {
-            await _productService.DeleteProductAsync(id);
-            return NoContent();
+            try
+            {
+                var result = await _productService.DeleteProductAsync(id);
+                return result ? NoContent() : NotFound();
+            }
+            catch (ProductNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
     }
-
 }

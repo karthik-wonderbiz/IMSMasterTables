@@ -23,8 +23,8 @@ namespace MasterTables.Application.CommandHandlers
                 CustomerEmail = request.CustomerEmail,
                 PhoneNumber = request.PhoneNumber,
                 IsActive = request.IsActive,
-                CreatedBy = "System", // Modify as needed
-                UpdatedBy = "System"
+                CreatedBy = Guid.NewGuid(),
+                UpdatedBy = Guid.NewGuid(),
             };
 
             await _repository.AddCustomerAsync(customer, cancellationToken);

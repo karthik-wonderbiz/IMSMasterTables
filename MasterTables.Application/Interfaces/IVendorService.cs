@@ -1,14 +1,15 @@
-﻿using MasterTables.Domain.Entities;
-
+﻿using MasterTables.Application.Commands;
+using MasterTables.Application.DTOs;
+using MasterTables.Domain.Entities;
 
 namespace MasterTables.Application.Interfaces
 {
     public interface IVendorService
     {
-        Task<IEnumerable<Vendor>> GetAllVendorsAsync();
-        Task<Vendor> GetVendorByIdAsync(Guid id);
-        Task<Vendor> CreateVendorAsync(Vendor Vendor);
-        Task<Vendor> UpdateVendorAsync(Vendor Vendor);
-        Task DeleteVendorAsync(Guid id);
+        Task<IEnumerable<VendorDto>> GetAllVendorsAsync(CancellationToken cancellationToken = default);
+        Task<VendorDto> GetVendorByIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<VendorDto> CreateVendorAsync(CreateVendorCommand command, CancellationToken cancellationToken = default);
+        Task<VendorDto> UpdateVendorAsync(UpdateVendorCommand command, CancellationToken cancellationToken = default);
+        Task<bool> DeleteVendorAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }
