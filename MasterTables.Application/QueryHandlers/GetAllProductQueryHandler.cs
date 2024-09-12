@@ -14,7 +14,7 @@ namespace MasterTables.Application.QueryHandlers
             _repository = repository;
         }
 
-        public async Task<IEnumerable<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             var products = await _repository.GetAllProductsAsync(cancellationToken);
 

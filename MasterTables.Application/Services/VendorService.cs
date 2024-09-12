@@ -16,7 +16,7 @@ namespace MasterTables.Application.Services
             _mediator = mediator;
         }
 
-        public async Task<IEnumerable<VendorDto>> GetAllVendorsAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<VendorDto>> GetAllVendorsAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<VendorDto> GetVendorByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<VendorDto> GetVendorByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<VendorDto> CreateVendorAsync(CreateVendorCommand request, CancellationToken cancellationToken)
+        public async Task<VendorDto> CreateVendorAsync(CreateVendorCommand request, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<VendorDto> UpdateVendorAsync(UpdateVendorCommand command, CancellationToken cancellationToken)
+        public async Task<VendorDto> UpdateVendorAsync(UpdateVendorCommand command, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<bool> DeleteVendorAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteVendorAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {

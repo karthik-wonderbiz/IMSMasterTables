@@ -14,7 +14,7 @@ namespace MasterTables.Application.QueryHandlers
             _customerRepository = customerRepository;
         }
 
-        public async Task<CustomerDto> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken = default)
+        public async Task<CustomerDto> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
         {
             var customer = await _customerRepository.GetCustomerByIdAsync(request.Id, cancellationToken);
             if (customer == null)

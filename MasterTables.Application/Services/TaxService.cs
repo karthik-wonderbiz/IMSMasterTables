@@ -16,7 +16,7 @@ namespace MasterTables.Application.Services
             _mediator = mediator;
         }
 
-        public async Task<IEnumerable<TaxDto>> GetAllTaxesAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<TaxDto>> GetAllTaxesAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<TaxDto> GetTaxByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<TaxDto> GetTaxByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -54,15 +54,15 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<TaxDto> CreateTaxAsync(CreateTaxCommand request, CancellationToken cancellationToken)
+        public async Task<TaxDto> CreateTaxAsync(TaxDto taxDto, CancellationToken cancellationToken = default)
         {
             try
             {
                 var command = new CreateTaxCommand
                 {
-                    TaxName = request.TaxName,
-                    Percentage = request.Percentage,
-                    Code = request.Code,
+                    TaxName = taxDto.TaxName,
+                    Percentage = taxDto.Percentage,
+                    Code = taxDto.Code,
                 };
                 var result = await _mediator.Send(command, cancellationToken);
                 if (result == null)
@@ -82,7 +82,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<TaxDto> UpdateTaxAsync(UpdateTaxCommand command, CancellationToken cancellationToken)
+        public async Task<TaxDto> UpdateTaxAsync(UpdateTaxCommand command, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<bool> DeleteTaxAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteTaxAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {

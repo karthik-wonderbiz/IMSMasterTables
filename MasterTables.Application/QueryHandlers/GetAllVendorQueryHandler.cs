@@ -14,7 +14,7 @@ namespace MasterTables.Application.QueryHandlers
             _repository = repository;
         }
 
-        public async Task<IEnumerable<VendorDto>> Handle(GetAllVendorsQuery request, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<VendorDto>> Handle(GetAllVendorsQuery request, CancellationToken cancellationToken)
         {
             var vendors = await _repository.GetAllVendorsAsync(cancellationToken);
 
