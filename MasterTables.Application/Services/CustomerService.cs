@@ -16,7 +16,7 @@ namespace MasterTables.Application.Services
             _mediator = mediator;
         }
 
-        public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<CustomerDto>> GetAllCustomersAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<CustomerDto> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<CustomerDto> GetCustomerByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<CustomerDto> CreateCustomerAsync(CreateCustomerCommand command, CancellationToken cancellationToken)
+        public async Task<CustomerDto> CreateCustomerAsync(CreateCustomerCommand command, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<CustomerDto> UpdateCustomerAsync(UpdateCustomerCommand command, CancellationToken cancellationToken)
+        public async Task<CustomerDto> UpdateCustomerAsync(UpdateCustomerCommand command, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<bool> DeleteCustomerAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteCustomerAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {

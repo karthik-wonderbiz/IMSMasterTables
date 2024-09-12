@@ -16,7 +16,7 @@ namespace MasterTables.Application.Services
             _mediator = mediator;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<ProductDto> GetProductByIdAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<ProductDto> GetProductByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -54,15 +54,15 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<ProductDto> CreateProductAsync(CreateProductCommand request, CancellationToken cancellationToken)
+        public async Task<ProductDto> CreateProductAsync(ProductDto productDto, CancellationToken cancellationToken = default)
         {
             try
             {
                 var command = new CreateProductCommand
                 {
-                    ProductName = request.ProductName,
-                    Price = request.Price,
-                    Code = request.Code,
+                    ProductName = productDto.ProductName,
+                    Price = productDto.Price,
+                    Code = productDto.Code,
                 };
                 var result = await _mediator.Send(command, cancellationToken);
                 if (result == null)
@@ -82,7 +82,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<ProductDto> UpdateProductAsync(UpdateProductCommand command, CancellationToken cancellationToken)
+        public async Task<ProductDto> UpdateProductAsync(UpdateProductCommand command, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<bool> DeleteProductAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> DeleteProductAsync(Guid id, CancellationToken cancellationToken = default)
         {
             try
             {

@@ -1,0 +1,17 @@
+﻿E:\IMS\IMSMasterTables\MasterTables.Domain\Entities\BaseEntity.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Entities\Customer.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Entities\Product.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Entities\Status.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Entities\Tax.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Entities\Vendor.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Events\ProductEvents\ProductCreatedEvent.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Events\ProductEvents\ProductDeletedEvent.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Events\ProductEvents\ProductUpdatedEvent.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Exceptions\CustomerExceptions.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Exceptions\ProductExceptions.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Exceptions\TaxExceptions.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Exceptions\VendorExceptions.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Interfaces\ICustomerRepository.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Interfaces\IProductRepository.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Interfaces\ITaxRepository.cs
+E:\IMS\IMSMasterTables\MasterTables.Domain\Interfaces\IVendorRepository.cs

@@ -13,7 +13,7 @@ namespace MasterTables.Application.CommandHandlers
             _repository = repository;
         }
 
-        public async Task<bool> Handle(DeleteTaxCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteTaxCommand request, CancellationToken cancellationToken = default)
         {
             var tax = await _repository.GetTaxByIdAsync(request.Id, cancellationToken);
             if (tax == null)
