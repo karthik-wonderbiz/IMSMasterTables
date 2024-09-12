@@ -12,8 +12,8 @@
         }
     }
 
-    public class ProductValidationException : Exception
+    public class SomethingWentWrongException : Exception
     {
-        public ProductValidationException(string message) : base(message) { }
+        public SomethingWentWrongException(string message) : base(message) { }
     }
 }

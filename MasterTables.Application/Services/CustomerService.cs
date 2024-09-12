@@ -27,7 +27,7 @@ namespace MasterTables.Application.Services
             catch (Exception ex)
             {
                 // Log exception here
-                throw new ApplicationException("An error occurred while retrieving customers.", ex);
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -50,7 +50,7 @@ namespace MasterTables.Application.Services
             catch (Exception ex)
             {
                 // Log exception here
-                throw new ApplicationException("An error occurred while retrieving the customer.", ex);
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -72,7 +72,7 @@ namespace MasterTables.Application.Services
             catch (Exception ex)
             {
                 // Log exception here
-                throw new ApplicationException("An error occurred while creating the customer.", ex);
+                throw new SomethingElseException(ex.Message);
             }
         }
 
