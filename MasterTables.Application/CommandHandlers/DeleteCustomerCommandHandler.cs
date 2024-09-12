@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MasterTables.Application.Commands;
 using MasterTables.Domain.Interfaces;
+using MasterTables.Domain.Exceptions;
 
 namespace MasterTables.Application.CommandHandlers
 {
@@ -18,7 +19,7 @@ namespace MasterTables.Application.CommandHandlers
             var customer = await _repository.GetCustomerByIdAsync(request.Id, cancellationToken);
             if (customer == null)
             {
-                throw new NullReferenceException("Customer not found"); // Custom exception handling can be used
+                throw new ProductNotFoundException("Customer not found");
             }
 
             await _repository.DeleteCustomerAsync(customer, cancellationToken);
