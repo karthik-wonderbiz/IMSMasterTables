@@ -1,0 +1,5 @@
+﻿E:\IMS\IMSMasterTables\MasterTables.Infrastructure\Data\MasterTablesDbContext.cs
+E:\IMS\IMSMasterTables\MasterTables.Infrastructure\Repositories\CustomerRepository.cs
+E:\IMS\IMSMasterTables\MasterTables.Infrastructure\Repositories\ProductRepository.cs
+E:\IMS\IMSMasterTables\MasterTables.Infrastructure\Repositories\TaxRepository.cs
+E:\IMS\IMSMasterTables\MasterTables.Infrastructure\Repositories\VendorRepository.cs

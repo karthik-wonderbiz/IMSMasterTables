@@ -1,4 +1,5 @@
 ﻿using MasterTables.Application.Commands;
+using MasterTables.Application.DTOs;
 using MasterTables.Application.Interfaces;
 using MasterTables.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -51,11 +52,11 @@ namespace MasterTables.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
+        public async Task<IActionResult> CreateProduct([FromBody] ProductDto productDto)
         {
             try
             {
-                var product = await _productService.CreateProductAsync(command);
+                var product = await _productService.CreateProductAsync(productDto);
                 return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
             }
             catch (ProductAlreadyExistsException)

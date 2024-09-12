@@ -15,7 +15,7 @@ namespace MasterTables.Application.CommandHandlers
             _repository = repository;
         }
 
-        public async Task<CustomerDto> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+        public async Task<CustomerDto> Handle(CreateCustomerCommand request, CancellationToken cancellationToken = default)
         {
             var customer = new Customer
             {

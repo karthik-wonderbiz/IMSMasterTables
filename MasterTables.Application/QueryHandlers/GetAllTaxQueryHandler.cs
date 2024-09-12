@@ -14,7 +14,7 @@ namespace MasterTables.Application.QueryHandlers
             _repository = repository;
         }
 
-        public async Task<IEnumerable<TaxDto>> Handle(GetAllTaxesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<TaxDto>> Handle(GetAllTaxesQuery request, CancellationToken cancellationToken = default)
         {
             var taxes = await _repository.GetAllTaxesAsync(cancellationToken);
 

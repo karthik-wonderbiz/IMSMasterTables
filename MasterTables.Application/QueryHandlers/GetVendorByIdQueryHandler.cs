@@ -15,7 +15,7 @@ namespace MasterTables.Application.QueryHandlers
             _vendorRepository = vendorRepository;
         }
 
-        public async Task<VendorDto> Handle(GetVendorByIdQuery request, CancellationToken cancellationToken)
+        public async Task<VendorDto> Handle(GetVendorByIdQuery request, CancellationToken cancellationToken = default)
         {
             var vendor = await _vendorRepository.GetVendorByIdAsync(request.Id, cancellationToken);
             if (vendor == null)

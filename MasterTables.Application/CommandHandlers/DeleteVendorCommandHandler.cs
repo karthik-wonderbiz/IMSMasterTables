@@ -13,7 +13,7 @@ namespace MasterTables.Application.CommandHandlers
             _repository = repository;
         }
 
-        public async Task<bool> Handle(DeleteVendorCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteVendorCommand request, CancellationToken cancellationToken = default)
         {
             var vendor = await _repository.GetVendorByIdAsync(request.Id, cancellationToken);
             if (vendor == null)

@@ -5,10 +5,9 @@ using MasterTables.Domain.Interfaces;
 using MasterTables.Infrastructure.Data;
 using MasterTables.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using MediatR;
-using MasterTables.Application.QueryHandlers;
 using MasterTables.Application.Commands;
+using FluentValidation.AspNetCore;
+using MasterTables.Application.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +36,8 @@ builder.Services.AddScoped<ITaxRepository, TaxRepository>();
 builder.Services.AddScoped<ITaxService, TaxService>();
 
 // Controller services
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateProductCommandValidator>());
 
 // Enable Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -55,4 +55,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

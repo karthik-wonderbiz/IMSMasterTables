@@ -13,7 +13,7 @@ namespace MasterTables.Application.CommandHandlers
             _repository = repository;
         }
 
-        public async Task<bool> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteProductCommand request, CancellationToken cancellationToken = default)
         {
             var product = await _repository.GetProductByIdAsync(request.Id, cancellationToken);
             if (product == null)
