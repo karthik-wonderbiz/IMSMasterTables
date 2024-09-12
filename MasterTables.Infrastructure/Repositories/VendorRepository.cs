@@ -14,35 +14,35 @@ namespace MasterTables.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Vendor>> GetAllVendorsAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Vendor>> GetAllVendorsAsync(CancellationToken cancellationToken)
         {
             return await _context.Vendors.ToListAsync(cancellationToken);
         }
 
-        public async Task<Vendor> GetVendorByIdAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<Vendor> GetVendorByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Vendors.FindAsync(new object[] { id }, cancellationToken);
         }
 
-        public async Task AddVendorAsync(Vendor vendor, CancellationToken cancellationToken = default)
+        public async Task AddVendorAsync(Vendor vendor, CancellationToken cancellationToken)
         {
             await _context.Vendors.AddAsync(vendor, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task UpdateVendorAsync(Vendor vendor, CancellationToken cancellationToken = default)
+        public async Task UpdateVendorAsync(Vendor vendor, CancellationToken cancellationToken)
         {
             _context.Vendors.Update(vendor);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteVendorAsync(Vendor vendor, CancellationToken cancellationToken = default)
+        public async Task DeleteVendorAsync(Vendor vendor, CancellationToken cancellationToken)
         {
             _context.Vendors.Remove(vendor);
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<bool> VendorExistsAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<bool> VendorExistsAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Vendors.AnyAsync(c => c.Id == id, cancellationToken);
         }

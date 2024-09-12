@@ -54,17 +54,17 @@ namespace MasterTables.Application.Services
             }
         }
 
-        public async Task<VendorDto> CreateVendorAsync(CreateVendorCommand request, CancellationToken cancellationToken = default)
+        public async Task<VendorDto> CreateVendorAsync(VendorDto vendorDto, CancellationToken cancellationToken = default)
         {
             try
             {
                 var command = new CreateVendorCommand
                 {
-                    VendorName = request.VendorName,
-                    Address = request.Address,
-                    Code = request.Code,
-                    ContactPersonName = request.ContactPersonName,
-                    ContactPersonPhone = request.ContactPersonPhone,
+                    VendorName = vendorDto.VendorName,
+                    Address = vendorDto.Address,
+                    Code = vendorDto.Code,
+                    ContactPersonName = vendorDto.ContactPersonName,
+                    ContactPersonPhone = vendorDto.ContactPersonPhone,
                 };
                 var result = await _mediator.Send(command, cancellationToken);
                 if (result == null)
