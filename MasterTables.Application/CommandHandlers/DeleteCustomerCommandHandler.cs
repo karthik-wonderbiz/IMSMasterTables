@@ -18,7 +18,7 @@ namespace MasterTables.Application.CommandHandlers
             var customer = await _repository.GetCustomerByIdAsync(request.Id, cancellationToken);
             if (customer == null)
             {
-                throw new Exception("Customer not found"); // Custom exception handling can be used
+                throw new NullReferenceException("Customer not found"); // Custom exception handling can be used
             }
 
             await _repository.DeleteCustomerAsync(customer, cancellationToken);
