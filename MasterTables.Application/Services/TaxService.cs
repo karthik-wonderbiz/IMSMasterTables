@@ -27,7 +27,7 @@ namespace MasterTables.Application.Services
             catch (Exception ex)
             {
                 // Log exception here
-                throw new ApplicationException("An error occurred while retrieving taxes.", ex);
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -50,7 +50,7 @@ namespace MasterTables.Application.Services
             catch (Exception ex)
             {
                 // Log exception here
-                throw new ApplicationException("An error occurred while retrieving the tax.", ex);
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -77,8 +77,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw new ApplicationException("An error occurred while creating the tax.", ex);
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -99,8 +98,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw;
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -122,8 +120,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw;
+                throw new SomethingElseException(ex.Message);
             }
         }
     }

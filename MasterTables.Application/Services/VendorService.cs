@@ -26,8 +26,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw new ApplicationException("An error occurred while retrieving vendors.", ex);
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -49,8 +48,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw new ApplicationException("An error occurred while retrieving the vendor.", ex);
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -79,8 +77,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw new ApplicationException("An error occurred while creating the vendor.", ex);
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -101,8 +98,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw;
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -124,8 +120,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw;
+                throw new SomethingElseException(ex.Message);
             }
         }
     }
