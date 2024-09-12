@@ -93,8 +93,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw;
+                throw new SomethingElseException(ex.Message);
             }
         }
 
@@ -116,8 +115,7 @@ namespace MasterTables.Application.Services
             }
             catch (Exception ex)
             {
-                // Log exception here
-                throw;
+                throw new SomethingElseException(ex.Message);
             }
         }
     }

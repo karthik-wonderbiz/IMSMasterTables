@@ -7,8 +7,6 @@ namespace MasterTables.Application.Validators.UpdateCommandValidator
     {
         public UpdateProductCommandValidator()
         {
-            //RuleFor(x => x.Id)
-            //    .NotEmpty().WithMessage("Product ID is required.");
 
             RuleFor(x => x.ProductName)
                 .NotEmpty().WithMessage("Product name is required.")
