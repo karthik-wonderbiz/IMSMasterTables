@@ -1,4 +1,5 @@
 ﻿using MasterTables.Application.Commands;
+using MasterTables.Application.DTOs;
 using MasterTables.Application.Interfaces;
 using MasterTables.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -51,11 +52,11 @@ namespace MasterTables.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateVendor([FromBody] CreateVendorCommand command)
+        public async Task<IActionResult> CreateVendor([FromBody] VendorDto vendorDto)
         {
             try
             {
-                var vendor = await _vendorService.CreateVendorAsync(command);
+                var vendor = await _vendorService.CreateVendorAsync(vendorDto);
                 return CreatedAtAction(nameof(GetVendorById), new { id = vendor.Id }, vendor);
             }
             catch (VendorAlreadyExistsException)

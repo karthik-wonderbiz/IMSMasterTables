@@ -9,16 +9,20 @@ using MasterTables.Application.Commands;
 using FluentValidation.AspNetCore;
 using MasterTables.Application.Validators.CreateCommandValidator;
 using MasterTables.Application.Validators.UpdateCommandValidator;
+using MasterTables.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // AutoMapper configuration
 builder.Services.AddAutoMapper(typeof(ProductMappingProfile));
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 // DbContext configuration
 builder.Services.AddDbContext<MasterTablesDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-                         b => b.MigrationsAssembly("MasterTables.Api")));
+    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("MasterTables.Api")));
+
+Console.WriteLine(connectionString);
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCustomerCommand).Assembly));
 

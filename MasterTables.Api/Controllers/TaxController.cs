@@ -1,4 +1,5 @@
 ﻿using MasterTables.Application.Commands;
+using MasterTables.Application.DTOs;
 using MasterTables.Application.Interfaces;
 using MasterTables.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -51,11 +52,11 @@ namespace MasterTables.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTax([FromBody] CreateTaxCommand command)
+        public async Task<IActionResult> CreateTax([FromBody] TaxDto taxDto)
         {
             try
             {
-                var tax = await _taxService.CreateTaxAsync(command);
+                var tax = await _taxService.CreateTaxAsync(taxDto);
                 return CreatedAtAction(nameof(GetTaxById), new { id = tax.Id }, tax);
             }
             catch (TaxAlreadyExistsException)
