@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MasterTables.Application.DTOs;
 
-namespace MasterTables.Application.Validators
+namespace MasterTables.Application.Validators.CreateCommandValidator
 {
     public class CreateProductCommandValidator : AbstractValidator<ProductDto>
     {

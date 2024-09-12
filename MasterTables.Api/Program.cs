@@ -7,7 +7,8 @@ using MasterTables.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using MasterTables.Application.Commands;
 using FluentValidation.AspNetCore;
-using MasterTables.Application.Validators;
+using MasterTables.Application.Validators.CreateCommandValidator;
+using MasterTables.Application.Validators.UpdateCommandValidator;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,8 @@ builder.Services.AddScoped<ITaxService, TaxService>();
 
 // Controller services
 builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateProductCommandValidator>());
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateProductCommandValidator>())
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UpdateProductCommandValidator>());
 
 // Enable Swagger
 builder.Services.AddEndpointsApiExplorer();

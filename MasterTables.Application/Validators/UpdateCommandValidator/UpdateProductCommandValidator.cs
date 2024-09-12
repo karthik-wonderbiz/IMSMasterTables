@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MasterTables.Application.Commands;
 
-namespace MasterTables.Application.Validators
+namespace MasterTables.Application.Validators.UpdateCommandValidator
 {
     public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
     {

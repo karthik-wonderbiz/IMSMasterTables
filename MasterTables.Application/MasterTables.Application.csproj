@@ -30,4 +30,9 @@
     <ProjectReference Include="..\MasterTables.Domain\MasterTables.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\DeleteCommandValidator\" />
+    <Folder Include="Validators\GetCommandValidator\" />
+  </ItemGroup>
+
 </Project>
