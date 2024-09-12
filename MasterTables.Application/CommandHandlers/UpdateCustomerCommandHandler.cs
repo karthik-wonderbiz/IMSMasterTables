@@ -2,6 +2,7 @@
 using MasterTables.Application.Commands;
 using MasterTables.Application.DTOs;
 using MasterTables.Domain.Interfaces;
+using MasterTables.Domain.Exceptions;
 
 namespace MasterTables.Application.CommandHandlers
 {
@@ -19,7 +20,7 @@ namespace MasterTables.Application.CommandHandlers
             var customer = await _repository.GetCustomerByIdAsync(request.Id, cancellationToken);
             if (customer == null)
             {
-                throw new Exception("Customer not found"); // Custom exception handling can be used
+                throw new CustomerNotFoundException("Customer not found"); // Custom exception handling can be used
             }
 
             customer.CustomerName = request.CustomerName;

@@ -2,6 +2,7 @@
 using MasterTables.Application.Commands;
 using MasterTables.Application.DTOs;
 using MasterTables.Domain.Interfaces;
+using MasterTables.Domain.Exceptions;
 
 namespace MasterTables.Application.CommandHandlers
 {
@@ -19,7 +20,7 @@ namespace MasterTables.Application.CommandHandlers
             var tax = await _repository.GetTaxByIdAsync(request.Id, cancellationToken);
             if (tax == null)
             {
-                throw new Exception("Tax not found");
+                throw new TaxNotFoundException("Tax not found");
             }
 
             tax.TaxName = request.TaxName;

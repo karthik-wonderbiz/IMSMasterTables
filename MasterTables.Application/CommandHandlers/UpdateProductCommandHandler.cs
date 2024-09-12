@@ -2,6 +2,7 @@
 using MasterTables.Application.Commands;
 using MasterTables.Application.DTOs;
 using MasterTables.Domain.Interfaces;
+using MasterTables.Domain.Exceptions;
 
 namespace MasterTables.Application.CommandHandlers
 {
@@ -19,7 +20,7 @@ namespace MasterTables.Application.CommandHandlers
             var product = await _repository.GetProductByIdAsync(request.Id, cancellationToken);
             if (product == null)
             {
-                throw new Exception("Product not found"); 
+                throw new ProductNotFoundException("Product not found"); 
             }
 
             product.ProductName = request.ProductName;

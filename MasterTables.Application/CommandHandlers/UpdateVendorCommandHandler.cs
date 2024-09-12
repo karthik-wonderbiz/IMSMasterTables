@@ -2,6 +2,7 @@
 using MasterTables.Application.Commands;
 using MasterTables.Application.DTOs;
 using MasterTables.Domain.Interfaces;
+using MasterTables.Domain.Exceptions;
 
 namespace MasterTables.Application.CommandHandlers
 {
@@ -19,7 +20,7 @@ namespace MasterTables.Application.CommandHandlers
             var vendor = await _repository.GetVendorByIdAsync(request.Id, cancellationToken);
             if (vendor == null)
             {
-                throw new Exception("Vendor not found");
+                throw new VendorNotFoundException("Vendor not found");
             }
 
             vendor.VendorName = request.VendorName;
