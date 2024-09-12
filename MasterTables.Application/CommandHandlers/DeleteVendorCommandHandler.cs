@@ -1,4 +1,5 @@
 ﻿using MasterTables.Application.Commands;
+using MasterTables.Domain.Exceptions;
 using MasterTables.Domain.Interfaces;
 using MediatR;
 
@@ -18,7 +19,7 @@ namespace MasterTables.Application.CommandHandlers
             var vendor = await _repository.GetVendorByIdAsync(request.Id, cancellationToken);
             if (vendor == null)
             {
-                throw new Exception("Vendor not found");
+                throw new VendorNotFoundException("Vendor not found");
             }
 
             await _repository.DeleteVendorAsync(vendor, cancellationToken);

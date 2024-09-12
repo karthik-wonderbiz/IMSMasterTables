@@ -1,4 +1,5 @@
 ﻿using MasterTables.Application.Commands;
+using MasterTables.Domain.Exceptions;
 using MasterTables.Domain.Interfaces;
 using MediatR;
 
@@ -18,7 +19,7 @@ namespace MasterTables.Application.CommandHandlers
             var tax = await _repository.GetTaxByIdAsync(request.Id, cancellationToken);
             if (tax == null)
             {
-                throw new Exception("Tax not found");
+                throw new TaxNotFoundException("Tax not found");
             }
 
             await _repository.DeleteTaxAsync(tax, cancellationToken);
