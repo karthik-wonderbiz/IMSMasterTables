@@ -9,20 +9,20 @@ using MasterTables.Application.Commands;
 using FluentValidation.AspNetCore;
 using MasterTables.Application.Validators.CreateCommandValidator;
 using MasterTables.Application.Validators.UpdateCommandValidator;
-using MasterTables.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // AutoMapper configuration
 builder.Services.AddAutoMapper(typeof(ProductMappingProfile));
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//var connectionString = builder.Configuration;
+
+//var res = connectionString.GetConnectionString("DefaultConncetion");
+
 
 // DbContext configuration
 builder.Services.AddDbContext<MasterTablesDbContext>(options =>
-    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("MasterTables.Api")));
-
-Console.WriteLine(connectionString);
+    options.UseSqlServer("Data Source=DESKTOP-49D7IT0\\MSSQLSERVER01;Initial Catalog=IMS_MasterTable;User ID=sa;Password=user@123;Trust Server Certificate=True", b => b.MigrationsAssembly("MasterTables.Api")));
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateCustomerCommand).Assembly));
 
